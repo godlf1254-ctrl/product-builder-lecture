@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로또 5게임 자동 생성기</title>
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 450px;
+            text-align: center;
+        }
+        h1 { color: #222; margin-bottom: 25px; }
+        
+        /* 5세트가 담길 리스트 공간 */
+        #lotto-list {
+            margin-bottom: 25px;
+        }
+        
+        /* 한 줄(세트) 디자인 */
+        .lotto-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        .lotto-row:last-child { border-bottom: none; }
+        
+        .set-label {
+            font-weight: bold;
+            color: #888;
+            font-size: 0.9rem;
+            width: 30px;
+        }
+
+        .balls-wrap {
+            display: flex;
+            gap: 8px;
+        }
+
+        .ball {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            background-color: #ef233c;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover { background-color: #d90429; transform: scale(1.02); }
+        button:active { transform: scale(0.98); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🚀 로또 5게임 자동</h1>
+    <div id="lotto-list">
+        </div>
+    <button onclick="generateFiveGames()">행운의 번호 뽑기</button>
+</div>
+
+<script>
+    function getLottoNumbers() {
+        const numbers = [];
+        while (numbers.length < 6) {
+            const num = Math.floor(Math.random() * 45) + 1;
+            if (!numbers.includes(num)) {
+                numbers.push(num);
+            }
+        }
+        return numbers.sort((a, b) => a - b);
+    }
+
+    function getBallColor(num) {
+        if (num <= 10) return '#fbc02d'; // 노랑
+        if (num <= 20) return '#1976d2'; // 파랑
+        if (num <= 30) return '#e53935'; // 빨강
+        if (num <= 40) return '#757575'; // 회색
+        return '#43a047'; // 초록
+    }
+
+    function generateFiveGames() {
+        const listContainer = document.getElementById('lotto-list');
+        listContainer.innerHTML = ''; // 초기화
+
+        const labels = ['A', 'B', 'C', 'D', 'E'];
+
+        for (let i = 0; i < 5; i++) {
+            const row = document.createElement('div');
+            row.className = 'lotto-row';
+
+            // 세트 이름 (A~E)
+            const label = document.createElement('span');
+            label.className = 'set-label';
+            label.innerText = labels[i];
+            row.appendChild(label);
+
+            // 번호 생성 및 공 추가
+            const ballsWrap = document.createElement('div');
+            ballsWrap.className = 'balls-wrap';
+            
+            const nums = getLottoNumbers();
+            nums.forEach(num => {
+                const ball = document.createElement('div');
+                ball.className = 'ball';
+                ball.style.backgroundColor = getBallColor(num);
+                ball.innerText = num;
+                ballsWrap.appendChild(ball);
+            });
+
+            row.appendChild(ballsWrap);
+            listContainer.appendChild(row);
+        }
+    }
+
+    // 페이지 로드 시 바로 한 번 실행
+    window.onload = generateFiveGames;
+</script>
+
+</body>
+</html>
