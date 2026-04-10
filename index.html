@@ -5,25 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로또 5게임 자동 생성기</title>
     <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --container-bg: #ffffff;
+            --text-color: #222;
+            --label-color: #888;
+            --border-color: #eee;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --btn-bg: #ef233c;
+            --btn-hover: #d90429;
+            --toggle-bg: #e0e0e0;
+            --toggle-text: #333;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --container-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --label-color: #bbb;
+            --border-color: #333;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --btn-bg: #ff4d6d;
+            --btn-hover: #ff758f;
+            --toggle-bg: #333;
+            --toggle-text: #f0f0f0;
+        }
+
         body {
             font-family: 'Pretendard', sans-serif;
-            background-color: #f8f9fa;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            transition: background-color 0.3s, color 0.3s;
         }
         .container {
-            background: #ffffff;
+            background: var(--container-bg);
             padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px var(--shadow-color);
             width: 450px;
             text-align: center;
+            position: relative;
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
-        h1 { color: #222; margin-bottom: 25px; }
+        h1 { color: var(--text-color); margin-bottom: 25px; transition: color 0.3s; }
         
+        /* 테마 토글 버튼 */
+        .theme-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--toggle-bg);
+            color: var(--toggle-text);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            width: auto;
+            transition: 0.3s;
+        }
+
         /* 5세트가 담길 리스트 공간 */
         #lotto-list {
             margin-bottom: 25px;
@@ -35,13 +82,13 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 0;
-            border-bottom: 1px dashed #eee;
+            border-bottom: 1px dashed var(--border-color);
         }
         .lotto-row:last-child { border-bottom: none; }
         
         .set-label {
             font-weight: bold;
-            color: #888;
+            color: var(--label-color);
             font-size: 0.9rem;
             width: 30px;
         }
@@ -64,32 +111,53 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        button {
+        .generate-btn {
             width: 100%;
             padding: 15px;
             font-size: 1.1rem;
             font-weight: bold;
-            background-color: #ef233c;
+            background-color: var(--btn-bg);
             color: white;
             border: none;
             border-radius: 12px;
             cursor: pointer;
             transition: 0.2s;
         }
-        button:hover { background-color: #d90429; transform: scale(1.02); }
-        button:active { transform: scale(0.98); }
+        .generate-btn:hover { background-color: var(--btn-hover); transform: scale(1.02); }
+        .generate-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">다크 모드</button>
     <h1>🚀 로또 5게임 자동</h1>
     <div id="lotto-list">
         </div>
-    <button onclick="generateFiveGames()">행운의 번호 뽑기</button>
+    <button class="generate-btn" onclick="generateFiveGames()">행운의 번호 뽑기</button>
 </div>
 
 <script>
+    // 테마 토글 함수
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', targetTheme);
+        localStorage.setItem('theme', targetTheme);
+        updateToggleButton(targetTheme);
+    }
+
+    function updateToggleButton(theme) {
+        const btn = document.getElementById('theme-toggle');
+        btn.innerText = theme === 'dark' ? '라이트 모드' : '다크 모드';
+    }
+
+    // 초기 테마 설정
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateToggleButton(savedTheme);
+
     function getLottoNumbers() {
         const numbers = [];
         while (numbers.length < 6) {
