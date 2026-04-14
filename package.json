@@ -1,4 +1,11 @@
 {
+  "name": "lucky-lotto",
+  "version": "1.0.0",
+  "description": "Lucky Lotto - 로또 당첨 확률 분석 및 행운의 번호 생성기",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "@google/generative-ai": "^0.24.1"
   }
