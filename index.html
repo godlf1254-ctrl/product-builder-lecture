@@ -338,17 +338,23 @@
         }
     }
 
-    // Disqus
+    // Disqus Configuration
+    var disqus_config = function () {
+        this.page.url = window.location.href;  // Use current page URL
+        this.page.identifier = 'lucky-lotto-main'; // Unique identifier for this page
+    };
+
     (function() {
         var d = document, s = d.createElement('script');
-        s.src = 'https://https-product-you-ha-pages-dev.disqus.com/embed.js';
+        // Check if shortname is 'product-you-ha-pages-dev' or 'https-product-you-ha-pages-dev'
+        s.src = 'https://product-you-ha-pages-dev.disqus.com/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
     })();
 
-    window.onload = generateFiveGames;
+    window.addEventListener('load', generateFiveGames);
 </script>
-<script id="dsq-count-scr" src="//https-product-you-ha-pages-dev.disqus.com/count.js" async></script>
+<script id="dsq-count-scr" src="https://product-you-ha-pages-dev.disqus.com/count.js" async></script>
 
 </body>
 </html>
